@@ -119,7 +119,7 @@ export default function UserList({ localUsers }) {
             </p>
           </div>
         ) : (
-          <p>No user selected</p>
+          <p>No user selected!</p>
         )}
       </Modal>
     </>
