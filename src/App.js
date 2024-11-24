@@ -3,6 +3,7 @@ import './App.css';
 import Sidebar from './components/Sidebar/Sidebar';
 import UserList from './components/UserList/UserList';
 import { Layout } from 'antd';
+import AddUserForm from './components/AddUserForm/AddUserForm';
 
 const {Content} = Layout;
 
@@ -14,7 +15,7 @@ function App() {
         <Content style={{ padding: '24px' }}>
         <Routes>
           <Route path='/' element={<UserList/>}/>
-          {/* <Route path='/' element={<AddUserForm/>}/> */}
+          <Route path='/add-user' element={<AddUserForm/>}/>
         </Routes>
         </Content>
       </Layout>

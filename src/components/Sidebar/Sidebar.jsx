@@ -1,8 +1,22 @@
 import { Layout, Menu } from "antd";
 import React, { useState } from "react";
 import { UserOutlined, PlusOutlined } from "@ant-design/icons";
+import { Link } from "react-router-dom";
 
 const { Sider } = Layout;
+
+const menuItems = [
+  {
+    key: "1",
+    icon: <UserOutlined />,
+    label: <Link to="/">User List</Link>,
+  },
+  {
+    key: "2",
+    icon: <PlusOutlined />,
+    label: <Link to="/add-user">Add New User</Link>,
+  },
+];
 
 export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
@@ -42,14 +56,7 @@ export default function Sidebar() {
           </div>
         )}
       </div>
-      <Menu
-        theme="dark"
-        mode="inline"
-        items={[
-          { key: "1", icon: <UserOutlined />, label: "Home" },
-          { key: "2", icon: <PlusOutlined />, label: "Add User" },
-        ]}
-      />
+      <Menu theme="dark" mode="inline" items={menuItems} />;
     </Sider>
   );
 }
