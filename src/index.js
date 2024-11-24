@@ -22,7 +22,7 @@ root.render(
       },
     }}>
      <QueryClientProvider client={queryClient}>
-      <Provider store={store}>
+      <Provider store={store}> 
       <App />
       </Provider>
      </QueryClientProvider>
