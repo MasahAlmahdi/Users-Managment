@@ -1,10 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
-import favouritesReducer from './favSlice';
+import favReducer from './favSlice';
 import userReducer from './userSlice';
 
 export const store = configureStore({
   reducer: {
-    favourites: favouritesReducer,
+    favourites: favReducer,
     user: userReducer,
   },
 });

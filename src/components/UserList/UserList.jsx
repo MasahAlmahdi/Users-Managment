@@ -1,14 +1,16 @@
 import React from "react";
 import useUsers from "../../query/useUsers";
-import { Modal, Table } from "antd";
+import { Button, Modal, Table } from "antd";
 import Loader from "../Loader";
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectedUser } from "../../redux/userSlice";
+import { addfavourite, removefavourite } from "../../redux/favSlice";
 
 export default function UserList({ localUsers }) {
   const { data: users, isLoading, isError, error } = useUsers();
   const dispatch = useDispatch();
   const selectedUser = useSelector((state) => state.user.selectedUser);
+  const favourites = useSelector((state) => state.favourites.favourites);
 
   if (isError) return <p>{error.message}</p>;
   if (isLoading) return <Loader />;
@@ -24,6 +26,18 @@ export default function UserList({ localUsers }) {
 
   const handleRowClick = (user) => {
     dispatch(setSelectedUser(user));
+  };
+
+  const togglefavourite = (user) => {
+    if (isfavourite(user)) {
+      dispatch(removefavourite(user));
+    } else {
+      dispatch(addfavourite(user));
+    }
+  };
+
+  const isfavourite = (user) => {
+    return favourites.some((fav) => fav.id === user.id);
   };
 
   const showModal = () => {
@@ -67,6 +81,15 @@ export default function UserList({ localUsers }) {
       title: "Phone",
       dataIndex: "phone",
       key: "phone",
+    },
+    {
+      title: "favourite",
+      key: "favourite",
+      render: (text, record) => (
+        <Button onClick={() => togglefavourite(record)}>
+          {isfavourite(record) ? "Remove from favourites" : "Add to favourites"}
+        </Button>
+      ),
     },
   ];
 
