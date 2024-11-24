@@ -3,7 +3,7 @@ import useUsers from "../../query/useUsers";
 import { Table } from "antd";
 import Loader from "../Loader";
 
-export default function UserList() {
+export default function UserList({ localUsers }) {
   const { data: users, isLoading, isError, error } = useUsers();
 
   if (isError) return <p>{error.message}</p>;
@@ -12,6 +12,11 @@ export default function UserList() {
     return <p>No users found</p>;
   }
 
+  const combinedUsers = [...(users || []), ...localUsers];
+  const dataSource = combinedUsers.map((user, index) => ({
+    ...user,
+    uniqueKey: `${user.id}-${index}`,
+  }));
   const columns = [
     {
       title: "#",
@@ -39,7 +44,12 @@ export default function UserList() {
   return (
     <>
       <h1>Users List</h1>
-      <Table dataSource={users} columns={columns} rowKey="id" />
+      <Table
+        dataSource={dataSource}
+        columns={columns}
+        rowKey="uniqueKey"
+        pagination={false}
+      />
     </>
   );
 }
