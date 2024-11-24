@@ -7,6 +7,8 @@ import 'antd/dist/reset.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { ConfigProvider } from 'antd';
+import { Provider } from 'react-redux';
+import { store } from './redux/store';
 
 const queryClient = new QueryClient();
 
@@ -20,7 +22,9 @@ root.render(
       },
     }}>
      <QueryClientProvider client={queryClient}>
+      <Provider store={store}>
       <App />
+      </Provider>
      </QueryClientProvider>
     </ConfigProvider>
   </Router>
