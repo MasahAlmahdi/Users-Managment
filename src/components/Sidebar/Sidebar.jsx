@@ -26,7 +26,7 @@ export default function Sidebar() {
       collapsible
       collapsed={collapsed}
       onCollapse={(value) => setCollapsed(value)}
-      style={{ height: "100vh", overflow: "auto" }}
+      style={{ height: "150vh", overflow: "auto" }}
     >
       <div
         style={{

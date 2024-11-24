@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import useUsers from "../../query/useUsers";
 import { Button, Modal, Table } from "antd";
 import Loader from "../Loader";
@@ -11,6 +11,7 @@ export default function UserList({ localUsers }) {
   const dispatch = useDispatch();
   const selectedUser = useSelector((state) => state.user.selectedUser);
   const favourites = useSelector((state) => state.favourites.favourites);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   if (isError) return <p>{error.message}</p>;
   if (isLoading) return <Loader />;
@@ -26,6 +27,7 @@ export default function UserList({ localUsers }) {
 
   const handleRowClick = (user) => {
     dispatch(setSelectedUser(user));
+    setIsModalVisible(true);
   };
 
   const togglefavourite = (user) => {
@@ -40,24 +42,8 @@ export default function UserList({ localUsers }) {
     return favourites.some((fav) => fav.id === user.id);
   };
 
-  const showModal = () => {
-    if (selectedUser) {
-      Modal.info({
-        title: `User Details: ${selectedUser.name}`,
-        content: (
-          <div>
-            <p>Email: {selectedUser?.email}</p>
-            <p>Phone: {selectedUser?.phone}</p>
-            <p>
-              Address: {selectedUser?.address?.street},
-              {selectedUser?.address?.city}
-            </p>
-            <p>Company: {selectedUser?.company?.name}</p>
-          </div>
-        ),
-        onOk() {},
-      });
-    }
+  const closeModal = () => {
+    setIsModalVisible(false);
   };
 
   const columns = [
@@ -83,10 +69,15 @@ export default function UserList({ localUsers }) {
       key: "phone",
     },
     {
-      title: "favourite",
+      title: "Favourite",
       key: "favourite",
       render: (text, record) => (
-        <Button onClick={() => togglefavourite(record)}>
+        <Button
+          onClick={(e) => {
+            e.stopPropagation();
+            togglefavourite(record);
+          }}
+        >
           {isfavourite(record) ? "Remove from favourites" : "Add to favourites"}
         </Button>
       ),
@@ -105,7 +96,32 @@ export default function UserList({ localUsers }) {
           onClick: () => handleRowClick(record),
         })}
       />
-      {selectedUser && showModal()}
+      <Modal
+        title={`User Details: ${selectedUser?.name}`}
+        visible={isModalVisible}
+        onCancel={closeModal}
+        footer={null}
+      >
+        {selectedUser ? (
+          <div>
+            <p>
+              <strong>Email:</strong> {selectedUser.email}
+            </p>
+            <p>
+              <strong>Phone:</strong> {selectedUser.phone}
+            </p>
+            <p>
+              <strong>Address:</strong> {selectedUser.address?.street},{" "}
+              {selectedUser.address?.city}
+            </p>
+            <p>
+              <strong>Company:</strong> {selectedUser.company?.name}
+            </p>
+          </div>
+        ) : (
+          <p>No user selected</p>
+        )}
+      </Modal>
     </>
   );
 }
